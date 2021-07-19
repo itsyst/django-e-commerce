@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'home',
     'store',
     'tags'
 ]
@@ -83,9 +84,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ecommerce',
-        'HOST':'localhost',
-        'USER':'root',
-        'PASWORD':''
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASWORD': ''
     }
 }
 
