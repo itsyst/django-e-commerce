@@ -4,5 +4,5 @@ from . import views
 
 # UrlConfig
 urlpatterns = [
-    path('home/', views.home)
+    path('', views.welcome)
 ]
