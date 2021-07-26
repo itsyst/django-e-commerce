@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.exceptions import ObjectDoesNotExist
 from store.models import Customer, Order, OrderItem, Product
 
@@ -32,6 +32,9 @@ def welcome(request):
     # Products: inventory < 10 OR price < 20 => not less than 20 negation ~Q(unit_price__lt=20)
     queryset = Product.objects.filter(
         Q(inventory__lt=10) | Q(unit_price__lt=20))
+
+    # Products: inventory = price: Using the F object comparing
+    queryset = Product.objects.filter(inventory=F('unit_price'))
 
     return render(request, 'home.html',
                   {
