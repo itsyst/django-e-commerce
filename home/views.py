@@ -35,8 +35,20 @@ def welcome(request):
 
     # Products: inventory = price: Using the F object comparing
     # queryset = Product.objects.filter(inventory=F('unit_price'))
-    queryset = Product.objects.filter(inventory=F('collection_id'))
+    # queryset = Product.objects.filter(inventory=F('collection_id')).order_by('title')
+    # queryset sort by multiple fields and in order desc
+    queryset = Product.objects.filter(inventory=F(
+        'collection_id')).order_by('unit_price', '-title') 
+    # return the first 5 objects 0,1,2,3,4
+    # queryset = Product.objects.all()[:5]
+    # return 5 objects 5,6,7,8,9
+    # queryset = Product.objects.all()[5:10]
 
+    # get a unique object
+    product = Product.objects.order_by('unit_price')[0] 
+
+    # get the first object
+    product = Product.objects.earliest('unit_price') 
 
 
 
@@ -46,5 +58,6 @@ def welcome(request):
                       'name': 'Khaled',
                       'products': list(queryset),
                       'customers': list(query_set),
-                      'orders': list(querysets)
+                      'orders': list(querysets),
+                      'product':product
                   })
