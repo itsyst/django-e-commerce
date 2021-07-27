@@ -30,11 +30,16 @@ def welcome(request):
     # queryset = Product.objects.filter(inventory__lt=10).filter(unit_price__lt=20)
 
     # Products: inventory < 10 OR price < 20 => not less than 20 negation ~Q(unit_price__lt=20)
-    queryset = Product.objects.filter(
-        Q(inventory__lt=10) | Q(unit_price__lt=20))
+    # queryset = Product.objects.filter(
+    #    Q(inventory__lt=10) | Q(unit_price__lt=20))
 
     # Products: inventory = price: Using the F object comparing
-    queryset = Product.objects.filter(inventory=F('unit_price'))
+    # queryset = Product.objects.filter(inventory=F('unit_price'))
+    queryset = Product.objects.filter(inventory=F('collection_id'))
+
+
+
+
 
     return render(request, 'home.html',
                   {
