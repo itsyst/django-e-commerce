@@ -6,7 +6,7 @@ from store.models import Customer, Order, OrderItem, Product
 
 def welcome(request):
     # Customers with .com accounts
-    query_set = Customer.objects.filter(email__icontains='.com')
+    query_set = Customer.objects.filter(email__icontains='.com')[:5]
 
     # Collections that don't have a featured product
     # queryset = Product.objects.filter(featured_product__isnull = True)
@@ -20,7 +20,7 @@ def welcome(request):
     # queryset = Product.objects.filter(title__icontains='Cup')
 
     # Orders placed by customer with id = 2
-    querysets = Order.objects.filter(customer__id=2)
+    querysets = Order.objects.filter(customer__id=2)[:5]
     # Orders items for products in collection 3
     # queryset = OrderItem.objects.filter(product__collection__id=3)
 
@@ -38,20 +38,31 @@ def welcome(request):
     # queryset = Product.objects.filter(inventory=F('collection_id')).order_by('title')
     # queryset sort by multiple fields and in order desc
     queryset = Product.objects.filter(inventory=F(
-        'collection_id')).order_by('unit_price', '-title') 
+        'collection_id')).order_by('unit_price', '-title')[:5]
+
     # return the first 5 objects 0,1,2,3,4
     # queryset = Product.objects.all()[:5]
+
     # return 5 objects 5,6,7,8,9
     # queryset = Product.objects.all()[5:10]
 
     # get a unique object
-    product = Product.objects.order_by('unit_price')[0] 
+    # product = Product.objects.order_by('unit_price')[0]
 
     # get the first object
-    product = Product.objects.earliest('unit_price') 
+    # product = Product.objects.earliest('unit_price')
 
+    # get the last object
+    product = Product.objects.latest('unit_price')
 
+    # selecting fields and related fields to query "__ notation to access the related fields"
+    # return a dictionary
+    # queryset = Product.objects.values('id', 'title', 'collection__title')[:5]
+    # queryset = Product.objects.values_list('id','title', 'collection__title)[:5] # return a tuple
 
+    # Return products that have been ordred and sort them by title
+    queryset = Product.objects.filter(id__in=OrderItem.objects.values(
+        'product_id').distinct()).order_by('title')[:5]
 
     return render(request, 'home.html',
                   {
@@ -59,5 +70,5 @@ def welcome(request):
                       'products': list(queryset),
                       'customers': list(query_set),
                       'orders': list(querysets),
-                      'product':product
+                      'product': product
                   })

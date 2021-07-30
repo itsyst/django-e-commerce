@@ -12,6 +12,8 @@
 		<ul>
 			{% for product in products %}
 			<li>{{product.title}}</li>
+			{% comment %} <li>{{product}}</li> {% endcomment %}
+
 			{% endfor %}
 		</ul>
 		<p>***********************</p>
@@ -20,5 +22,7 @@
 			<li>{{customer.first_name}}</li>
 			{% endfor %}
 		</ul>
+		<p>***********************</p>
+		<p>{{product.title}}</p>
 	</body>
 </html>
