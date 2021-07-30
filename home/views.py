@@ -37,8 +37,8 @@ def welcome(request):
     # queryset = Product.objects.filter(inventory=F('unit_price'))
     # queryset = Product.objects.filter(inventory=F('collection_id')).order_by('title')
     # queryset sort by multiple fields and in order desc
-    queryset = Product.objects.filter(inventory=F(
-        'collection_id')).order_by('unit_price', '-title')[:5]
+    # queryset = Product.objects.filter(inventory=F(
+    #    'collection_id')).order_by('unit_price', '-title')[:5]
 
     # return the first 5 objects 0,1,2,3,4
     # queryset = Product.objects.all()[:5]
@@ -55,14 +55,13 @@ def welcome(request):
     # get the last object
     product = Product.objects.latest('unit_price')
 
-    # selecting fields and related fields to query "__ notation to access the related fields"
-    # return a dictionary
+    # selecting fields and related fields to query "__ notation to access the related fields" # return a dictionary
     # queryset = Product.objects.values('id', 'title', 'collection__title')[:5]
     # queryset = Product.objects.values_list('id','title', 'collection__title)[:5] # return a tuple
 
-    # Return products that have been ordred and sort them by title
-    queryset = Product.objects.filter(id__in=OrderItem.objects.values(
-        'product_id').distinct()).order_by('title')[:5]
+    # Return a defined fields - a dictionary object - be carefull when using
+    # queryset = Product.objects.only('id', 'title')[:5]
+    queryset = Product.objects.defer('description')[:5]
 
     return render(request, 'home.html',
                   {
