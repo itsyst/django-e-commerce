@@ -9,20 +9,30 @@
 		{% else %}
 		<h1>Hi there !</h1>
 		{% endif %}
+		<p>*********** products ************</p>
 		<ul>
 			{% for product in products %}
-			<li>{{product.title}}</li>
-			{% comment %} <li>{{product}}</li> {% endcomment %}
-
-			{% endfor %}
+			<li>
+				{{product.title}} {% comment %} - {{product.collection.title}}{%
+				endcomment %}
+			</li>
+			{% comment %}
+			<li>{{product}}</li>
+			{% endcomment %} {% endfor %}
 		</ul>
-		<p>***********************</p>
+		<p>*********** customers ************</p>
 		<ul>
 			{% for customer in customers %}
 			<li>{{customer.first_name}}</li>
 			{% endfor %}
 		</ul>
-		<p>***********************</p>
+		<p>********** product *************</p>
 		<p>{{product.title}}</p>
+		<p>********** orders *************</p>
+		<ul>
+			{% for order in orders %}
+			<li>{{order.id}} | {{order.customer.first_name}}</li>
+			{% endfor %}
+		</ul>
 	</body>
 </html>

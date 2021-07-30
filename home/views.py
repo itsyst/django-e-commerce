@@ -20,7 +20,7 @@ def welcome(request):
     # queryset = Product.objects.filter(title__icontains='Cup')
 
     # Orders placed by customer with id = 2
-    querysets = Order.objects.filter(customer__id=2)[:5]
+    # querysets = Order.objects.filter(customer__id=2)[:5]
     # Orders items for products in collection 3
     # queryset = OrderItem.objects.filter(product__collection__id=3)
 
@@ -61,7 +61,17 @@ def welcome(request):
 
     # Return a defined fields - a dictionary object - be carefull when using
     # queryset = Product.objects.only('id', 'title')[:5]
-    queryset = Product.objects.defer('description')[:5]
+    # queryset = Product.objects.defer('description')[:5]
+
+    # Selecting related objects
+    # queryset = Product.objects.all() # application is hanging
+    # use select_related when the end up of the relationship has one instance like collection
+    queryset = Product.objects.select_related('collection').all()[:5]
+    # use prefetch_related when the other end up of the relationship has many objects
+    # queryset = Product.objects.prefetch_related('promotions').all()
+
+    # Get the last 5 orders with their customer and items (include product)
+    querysets = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
 
     return render(request, 'home.html',
                   {
