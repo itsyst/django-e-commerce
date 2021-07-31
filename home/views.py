@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Q, F
+from django.db.models import Value, Q, F
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from store.models import Customer, Order, OrderItem, Product
@@ -89,6 +89,11 @@ def welcome(request):
     result = Product.objects.filter(
         collection__id=3).aggregate(min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
 
+    # Annotating objects - set every field to true 
+    # results = Customer.objects.annotate(is_new=Value(True))
+    # Annotating objects - reference the id field
+    results = Customer.objects.annotate(new_id = F('id') + 1)
+
     return render(request, 'home.html',
                   {
                       'name': 'Khaled',
@@ -96,5 +101,6 @@ def welcome(request):
                       'customers': list(query_set),
                       'orders': list(querysets),
                       'product': product,
-                      'result': result
+                      'result': result,
+                      'results': list(results)
                   })
