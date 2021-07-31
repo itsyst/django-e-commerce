@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q, F
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from store.models import Customer, Order, OrderItem, Product
 
 
@@ -71,7 +72,22 @@ def welcome(request):
     # queryset = Product.objects.prefetch_related('promotions').all()
 
     # Get the last 5 orders with their customer and items (include product)
-    querysets = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
+    querysets = Order.objects.select_related('customer').prefetch_related(
+        'orderitem_set__product').order_by('-placed_at')[:5]
+
+    # Aggregate objects - number of products
+    # result = Product.objects.aggregate(
+    #    count=Count('id'), min_price=Min('unit_price'))
+    # Aggregate objects - number of orders
+    # result = Order.objects.aggregate(count = Count('id))
+    # Aggregate units of product 1 that has has been sold
+    # result = OrderItem.objects.filter(
+    #    product__id=1).aggregate(units_sold=Sum('quantity'))
+    # Aggregate orders that customer 1 has placed
+    # result = Order.objects.filter(customer__id = 1).aggregate( orders_placed = Count('id'))
+    # return min, max and avg price of products in collection 3
+    result = Product.objects.filter(
+        collection__id=3).aggregate(min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
 
     return render(request, 'home.html',
                   {
@@ -79,5 +95,6 @@ def welcome(request):
                       'products': list(queryset),
                       'customers': list(query_set),
                       'orders': list(querysets),
-                      'product': product
+                      'product': product,
+                      'result': result
                   })
