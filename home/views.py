@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.db.models import Value, Q, F
+from django.db.models import Value, Q, F, Func
+from django.db.models.functions import Concat, Upper
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from store.models import Customer, Order, OrderItem, Product
@@ -89,10 +90,18 @@ def welcome(request):
     result = Product.objects.filter(
         collection__id=3).aggregate(min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
 
-    # Annotating objects - set every field to true 
+    # Annotating objects - set every field to true
     # results = Customer.objects.annotate(is_new=Value(True))
     # Annotating objects - reference the id field
-    results = Customer.objects.annotate(new_id = F('id') + 1)
+    # results = Customer.objects.annotate(new_id = F('id') + 1)
+
+    # Calling database functions
+    results = Customer.objects.annotate(
+        # CONTACT
+        full_name=Upper(Func(F('first_name'), Value(' '), F(
+            'last_name'), function='CONCAT'))
+        # full_name = Concat('first_name', Value(' '), 'last_name')
+    )
 
     return render(request, 'home.html',
                   {
