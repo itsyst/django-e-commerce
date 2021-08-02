@@ -42,6 +42,8 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
+    
+    # order_set django creates the reverse relationship should use order to avoid exception
 
 
 class Order(models.Model):

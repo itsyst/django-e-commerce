@@ -34,6 +34,12 @@
 			<li>{{order.id}} | {{order.customer.first_name}}</li>
 			{% endfor %}
 		</ul>
+	  <p>********** orders count *************</p>
+		<ul>
+			{% for count in counts %}
+			<li>{{count.first_name}} | {{count.orders_count}}</li>
+			{% endfor %}
+		</ul>
 		<p>********** result *************</p>
 		<p>{{ result }}</p>
 	</body>

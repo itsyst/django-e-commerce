@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.db.models import Value, Q, F, Func
+from django.db.models import Value, Q, F, Func, Count
 from django.db.models.functions import Concat, Upper
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.aggregates import Count, Max, Min, Avg, Sum
+from django.db.models.aggregates import Max, Min, Avg, Sum
 from store.models import Customer, Order, OrderItem, Product
 
 
@@ -39,8 +39,8 @@ def welcome(request):
     # queryset = Product.objects.filter(inventory=F('unit_price'))
     # queryset = Product.objects.filter(inventory=F('collection_id')).order_by('title')
     # queryset sort by multiple fields and in order desc
-    # queryset = Product.objects.filter(inventory=F(
-    #    'collection_id')).order_by('unit_price', '-title')[:5]
+    queryset = Product.objects.filter(inventory=F(
+        'collection_id')).order_by('unit_price', '-title')[:5]
 
     # return the first 5 objects 0,1,2,3,4
     # queryset = Product.objects.all()[:5]
@@ -68,7 +68,7 @@ def welcome(request):
     # Selecting related objects
     # queryset = Product.objects.all() # application is hanging
     # use select_related when the end up of the relationship has one instance like collection
-    queryset = Product.objects.select_related('collection').all()[:5]
+    # queryset = Product.objects.select_related('collection').all()[:5]
     # use prefetch_related when the other end up of the relationship has many objects
     # queryset = Product.objects.prefetch_related('promotions').all()
 
@@ -103,6 +103,9 @@ def welcome(request):
         # full_name = Concat('first_name', Value(' '), 'last_name')
     )
 
+    # get the number of orders that each customer has placed
+    queryset_count = Customer.objects.annotate(orders_count=Count('order'))[:5]
+
     return render(request, 'home.html',
                   {
                       'name': 'Khaled',
@@ -111,5 +114,6 @@ def welcome(request):
                       'orders': list(querysets),
                       'product': product,
                       'result': result,
-                      'results': list(results)
+                      'results': list(results),
+                      'counts': list(queryset_count)
                   })
