@@ -1,5 +1,5 @@
 import decimal
-from tags.models import TaggedItem
+from tags.models import TaggedItem, TaggedItemManager
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.fields import DecimalField
 from django.shortcuts import render
@@ -130,11 +130,12 @@ def welcome(request):
     # Quering generic relationships
     # content_type = ContentType.objects.get_for_model(Product)
     # queryset = TaggedItem.objects \
-                        #  .select_related('tag') \
-                        #  .filter(
-                        #        content_type = content_type,
-                        #        object_id = 1
-                        # )
+    #                      .select_related('tag') \
+    #                      .filter(
+    #                            content_type = content_type,
+    #                            object_id = 1
+    #                     )
+    queryset_tags = TaggedItem.objects.get_tags_for(Product, 1)
 
     return render(request, 'home.html',
                   {
@@ -145,5 +146,6 @@ def welcome(request):
                       'product': product,
                       'result': result,
                       'results': list(results),
-                      'counts': list(queryset_count)
+                      'counts': list(queryset_count),
+                      'tags': list(queryset_tags)
                   })
