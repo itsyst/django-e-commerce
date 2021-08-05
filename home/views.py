@@ -1,9 +1,11 @@
+import decimal
+from django.db.models.fields import DecimalField
 from django.shortcuts import render
-from django.db.models import Value, Q, F, Func, Count
+from django.db.models import Value, Q, F, Func, Count, ExpressionWrapper
 from django.db.models.functions import Concat, Upper
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Max, Min, Avg, Sum
-from store.models import Customer, Order, OrderItem, Product
+from store.models import Collection, Customer, Order, OrderItem, Product
 
 
 def welcome(request):
@@ -94,6 +96,19 @@ def welcome(request):
     # results = Customer.objects.annotate(is_new=Value(True))
     # Annotating objects - reference the id field
     # results = Customer.objects.annotate(new_id = F('id') + 1)
+    # Customers and their last Id
+    # queryset = Customer.objects.annotate(last_order_is = Max('order_id'))
+    # Collections and count of their products
+    # queryset = Collection.objects.annotate(products_count = Count('product'))
+    # Customers with more than 5 orders
+    # queryset = Customer.objects.annotate(
+    #    orders_count=Count('order')).filter(orders_count__gt=5)
+    # Customers and the total amount they have spent
+    # queryset = Customer.objects.annotate(total_spent_sum=Sum(
+    #    F('order__orderitem__unit_price')*F('order__orderitem__quantity')))
+    # Top 5 best selling products and their total sales
+    # queryset = Product.objects.annotate(total_sales=Sum(
+    #    F('orderitem__unit_price')*F('orderitem__quantity'))).order_by('total_sales')[:5]
 
     # Calling database functions
     results = Customer.objects.annotate(
@@ -105,6 +120,10 @@ def welcome(request):
 
     # get the number of orders that each customer has placed
     queryset_count = Customer.objects.annotate(orders_count=Count('order'))[:5]
+
+    # Expression wrappers
+    # discounted_price = ExpressionWrapper(F('unit_price')*0.8, output_field=DecimalField())
+    # queryset = Product.objects.annotate(discounted_price=discounted_price)
 
     return render(request, 'home.html',
                   {
