@@ -8,9 +8,11 @@ from django.db.models.functions import Concat, Upper
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Max, Min, Avg, Sum
 from store.models import Cart, CartItem, Collection, Customer, Order, OrderItem, Product
-from django.db import transaction
+from django.db import connection, transaction
 
 # @transaction.atomic() decorator to this view function- wrap all code inside the transaction
+
+
 def welcome(request):
     # Customers with .com accounts
     query_set = Customer.objects.filter(email__icontains='.com')[:5]
@@ -147,7 +149,7 @@ def welcome(request):
     #     title="Videos",
     #     featured_product=Product(pk=2)
     # )
-    #### 
+    ####
     # Create a shopping cart with an item
     # cart = Cart()
     # cart.save()
@@ -191,7 +193,7 @@ def welcome(request):
 
     # Transactions: multiple changes in database
     # This part has to be inside a transaction function
-    # with transaction.atomic():    
+    # with transaction.atomic():
     #     order = Order()
     #     order.customer = Customer(pk=1)
     #     order.save()
@@ -203,6 +205,18 @@ def welcome(request):
     #     item.unit_price = 16
     #     item.save()
 
+    # Execute Raw sql queries for complex queries only
+    queryset_raw = Product.objects.raw('SELECT id, title FROM store_product')
+
+    # access the database directly
+    with connection.cursor() as cursor:
+        # sql = 'SELECT title FROM store_collection'
+        # cursor.execute(sql)
+        # call a procedure / return all customers
+        # cursor.callproc('get_customers')
+        # call a procedure / return specific customer
+        cursor.callproc('get_customer', [1])
+
     return render(request, 'home.html',
                   {
                       'name': 'Khaled',
@@ -213,5 +227,7 @@ def welcome(request):
                       'result': result,
                       'results': list(results),
                       'counts': list(queryset_count),
-                      'tags': list(queryset_tags)
+                      'tags': list(queryset_tags),
+                      'result_raw': list(queryset_raw)
+
                   })
