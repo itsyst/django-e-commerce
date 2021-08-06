@@ -137,6 +137,16 @@ def welcome(request):
     #                     )
     queryset_tags = TaggedItem.objects.get_tags_for(Product, 1)
 
+    # Create a new collection object
+    # collection = Collection()
+    # collection.title = 'Books'
+    # collection.featured_product = Product(pk=1)
+    # collection.save()
+    # Collection.objects.create(
+    #     title="Videos",
+    #     featured_product=Product(pk=2)
+    # )
+
     return render(request, 'home.html',
                   {
                       'name': 'Khaled',
