@@ -11,6 +11,12 @@ class Collection(models.Model):
     title = models.CharField(max_length=255)
     featured_product = models.ForeignKey(
         'Product', on_delete=models.SET_NULL, null=True, related_name='+')
+    
+    # override the default string representation of the collection object
+    def __str__(self) -> str:
+        return self.title
+
+
 
 
 class Product(models.Model):
@@ -42,7 +48,7 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
-    
+
     # order_set django creates the reverse relationship should use order to avoid exception
 
 
@@ -56,14 +62,14 @@ class Order(models.Model):
         (PAYMENT_STATUS_Failed, 'Failed')
     ]
 
-
     placed_at = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(
         max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
 
+
 class OrderItem(models.Model):
-    #orderitem_set django creates the reverse relationship
+    # orderitem_set django creates the reverse relationship
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.PositiveSmallIntegerField()
