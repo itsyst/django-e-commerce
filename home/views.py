@@ -147,6 +147,14 @@ def welcome(request):
     #     featured_product=Product(pk=2)
     # )
 
+    # Update collection
+    # collection = Collection.objects.get(pk=12)
+    # collection.featured_product = None
+    # collection.save()
+    # Collection.objects.filter(pk=12).update(
+    #     featured_product=None
+    # )
+
     return render(request, 'home.html',
                   {
                       'name': 'Khaled',
