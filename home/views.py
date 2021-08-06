@@ -8,8 +8,9 @@ from django.db.models.functions import Concat, Upper
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Max, Min, Avg, Sum
 from store.models import Cart, CartItem, Collection, Customer, Order, OrderItem, Product
+from django.db import transaction
 
-
+# @transaction.atomic() decorator to this view function- wrap all code inside the transaction
 def welcome(request):
     # Customers with .com accounts
     query_set = Customer.objects.filter(email__icontains='.com')[:5]
@@ -187,6 +188,20 @@ def welcome(request):
     # item = CartItem(pk=2)
     # item.delete()
     # CartItem.objects.filter(pk=2).delete()
+
+    # Transactions: multiple changes in database
+    # This part has to be inside a transaction function
+    # with transaction.atomic():    
+    #     order = Order()
+    #     order.customer = Customer(pk=1)
+    #     order.save()
+
+    #     item = OrderItem()
+    #     item.order = order
+    #     item.product = Product(pk=1)
+    #     item.quantity = 2
+    #     item.unit_price = 16
+    #     item.save()
 
     return render(request, 'home.html',
                   {
