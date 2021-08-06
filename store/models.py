@@ -16,7 +16,9 @@ class Collection(models.Model):
     def __str__(self) -> str:
         return self.title
 
-
+    # default ordering collection fields
+    class Meta:
+        ordering = ['title']
 
 
 class Product(models.Model):
