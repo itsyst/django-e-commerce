@@ -1,13 +1,13 @@
 import decimal
 from tags.models import TaggedItem, TaggedItemManager
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.fields import DecimalField
+from django.db.models.fields import DateTimeCheckMixin, DateTimeField, DecimalField
 from django.shortcuts import render
 from django.db.models import Value, Q, F, Func, Count, ExpressionWrapper
 from django.db.models.functions import Concat, Upper
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Max, Min, Avg, Sum
-from store.models import Collection, Customer, Order, OrderItem, Product
+from store.models import Cart, CartItem, Collection, Customer, Order, OrderItem, Product
 
 
 def welcome(request):
@@ -139,12 +139,26 @@ def welcome(request):
 
     # Create a new collection object
     # collection = Collection()
-    # collection.title = 'Books'
+    # collection.title = 'Videos'
     # collection.featured_product = Product(pk=1)
     # collection.save()
     # Collection.objects.create(
     #     title="Videos",
     #     featured_product=Product(pk=2)
+    # )
+    #### 
+    # Create a shopping cart with an item
+    # cart = Cart()
+    # cart.save()
+    # item = CartItem()
+    # item.cart = cart
+    # item.product_id =2
+    # item.quantity = 2
+    # item.save()
+    # item = CartItem.objects.create(
+    #     cart=Cart(pk=1),
+    #     product=Product(pk=1),
+    #     quantity=1
     # )
 
     # Update collection
@@ -154,6 +168,25 @@ def welcome(request):
     # Collection.objects.filter(pk=12).update(
     #     featured_product=None
     # )
+    ####
+    # Update the quantity of an item in a shopping cart
+    # item = CartItem.objects.get(pk=2)
+    # item.quantity = 3
+    # item.save()
+    # CartItem.objects.filter(pk=2).update(
+    #     quantity=3
+    # )
+
+    # Delete single collection
+    # collection = Collection(pk=11)
+    # collection.delete()
+    # Delete multiple collections
+    # Collection.objects.filter(id__gt=5).delete()
+    ###
+    # Remove a shopping cart with its items (Cascade no need to delete each item individually)
+    # item = CartItem(pk=2)
+    # item.delete()
+    # CartItem.objects.filter(pk=2).delete()
 
     return render(request, 'home.html',
                   {
