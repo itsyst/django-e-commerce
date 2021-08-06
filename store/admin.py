@@ -1,4 +1,6 @@
+from typing import Any, List, Optional, Tuple
 from django.contrib import admin
+from django.contrib.admin.filters import SimpleListFilter
 from django.db.backends.utils import format_number
 from django.db.models.aggregates import Count
 from django.db.models.query import QuerySet
@@ -33,12 +35,27 @@ class CollectionAdmin(admin.ModelAdmin):
         return 'Yes'
 
 
+class InventoryFilter(admin.SimpleListFilter):
+    title = 'inventory'
+    parameter_name = 'inventory'
+
+    def lookups(self, request: Any, model_admin: Any) -> List[Tuple[Any, str]]:
+        return [
+            ('<10', 'LOW'), ('10>', 'HIGH')
+        ]
+
+    def queryset(self, request: Any, queryset: QuerySet) -> Optional[QuerySet]:
+        if self.value() == '<10':
+            return queryset.filter(inventory__lt=10)
+        return queryset.filter(inventory__gt=10)
+
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'unit_price',
                     'inventory_status', 'collection_title']
     list_editable = ['unit_price']
-    list_filter = ['collection','last_update']
+    list_filter = ['collection', 'last_update', InventoryFilter]
     list_per_page = 10
     list_select_related = ['collection']
    # admin.site.register(models.Product, ProductAdmin)
@@ -50,7 +67,7 @@ class ProductAdmin(admin.ModelAdmin):
     def inventory_status(self, product):
         if product.inventory < 10:
             return 'Low'
-        return 'Ok'
+        return 'HIGH'
 
 
 @admin.register(models.Customer)
@@ -60,7 +77,6 @@ class CustomerAdmin(admin.ModelAdmin):
     list_per_page = 10
     ordering = ['first_name', 'last_name']
     search_fields = ['first_name__istartswith', 'last_name__istartswith']
-
 
     @admin.display(ordering="orders_count")
     def orders_count(self, customer):
@@ -73,7 +89,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).annotate(
-           orders_count  = Count('order')
+            orders_count=Count('order')
         )
 
 
