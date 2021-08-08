@@ -1,11 +1,5 @@
-from enum import auto
-from tags.models import TaggedItem
 from typing import Any, List, Optional, Tuple
 from django.contrib import admin, messages
-from django.contrib.contenttypes.admin import GenericTabularInline
-from django.contrib.admin.decorators import action
-from django.contrib.admin.filters import SimpleListFilter
-from django.db.backends.utils import format_number
 from django.db.models.aggregates import Count
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
@@ -55,13 +49,6 @@ class InventoryFilter(admin.SimpleListFilter):
         return queryset.filter(inventory__gt=10)
 
 
-class TagInline(GenericTabularInline):
-    autocomplete_fields = ['tag']
-    min_num = 1
-    extra = 0
-    model = TaggedItem
-
-
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     # fields = ['title','description']
@@ -71,7 +58,6 @@ class ProductAdmin(admin.ModelAdmin):
     }
     exclude = ['promotions']
     actions = ['clear_inventory']
-    inlines = [TagInline]
     list_display = ['id', 'title', 'unit_price',
                     'inventory_status', 'collection_title']
     list_editable = ['unit_price']
