@@ -113,6 +113,8 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['customer']
     list_display = ['id', 'placed_at', 'payment_status', 'customer']
     list_editable = ['payment_status']
     list_per_page = 10
+
