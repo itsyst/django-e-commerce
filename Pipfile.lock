@@ -26,11 +26,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:3da05fea54fdec2315b54a563d5b59f3b4e2b1e69c3a5841dda35019c01855cd",
-                "sha256:c58b5f19c5ae0afe6d75cbdd7df561e6eb929339985dbbda2565e1cabb19a62e"
+                "sha256:7f92413529aa0e291f3be78ab19be31aefb1e1c9a52cd59e130f505f27a51f13",
+                "sha256:f27f8544c9d4c383bbe007c57e3235918e258364577373d4920e9162837be022"
             ],
             "index": "pypi",
-            "version": "==3.2.5"
+            "version": "==3.2.6"
         },
         "mysqlclient": {
             "hashes": [
@@ -62,11 +62,11 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:38b95085e9d92e2ca06cf8b35c12a74fa81da395a6f9e65803742e6509c05892",
-                "sha256:606b2911d10c3dcf35e58d2ee5c97360e8477d7b9f3efc3f24811c93e6fc2cd9"
+                "sha256:3975a0bd5373bdce166e60c851cfcbaf21ee96de80ec518c1f4cb3e94c3fb334",
+                "sha256:ab7f36e8a78b8e54a62028ba6beef7561db4cdb6f2a5009ecc44a6f42b5697ef"
             ],
             "markers": "python_version ~= '3.6'",
-            "version": "==2.6.2"
+            "version": "==2.6.6"
         },
         "autopep8": {
             "hashes": [
@@ -86,11 +86,11 @@
         },
         "isort": {
             "hashes": [
-                "sha256:eed17b53c3e7912425579853d078a0832820f023191561fcee9d7cae424e0813",
-                "sha256:f65ce5bd4cbc6abdfbe29afc2f0245538ab358c14590912df638033f157d555e"
+                "sha256:9c2ea1e62d871267b78307fe511c0838ba0da28698c5732d54e2790bf3ba9899",
+                "sha256:e17d6e2b81095c9db0a03a8025a957f334d6ea30b26f9ec70805411e5c7c81f2"
             ],
             "markers": "python_version < '4.0' and python_full_version >= '3.6.1'",
-            "version": "==5.9.2"
+            "version": "==5.9.3"
         },
         "lazy-object-proxy": {
             "hashes": [
@@ -137,11 +137,11 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:23a1dc8b30459d78e9ff25942c61bb936108ccbe29dd9e71c01dc8274961709a",
-                "sha256:5d46330e6b8886c31b5e3aba5ff48c10f4aa5e76cbf9002c6544306221e63fbc"
+                "sha256:2e1a0eb2e8ab41d6b5dbada87f066492bb1557b12b76c47c2ee8aa8a11186594",
+                "sha256:8b838c8983ee1904b2de66cce9d0b96649a91901350e956d78f289c3bc87b48e"
             ],
             "index": "pypi",
-            "version": "==2.9.3"
+            "version": "==2.9.6"
         },
         "toml": {
             "hashes": [
