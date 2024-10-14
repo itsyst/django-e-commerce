@@ -4,43 +4,160 @@
 		<title>Home</title>
 	</head>
 	<body>
-		{% if name%}
-		<h1>Hi {{name}}!</h1>
-		{% else %}
-		<h1>Hi there !</h1>
-		{% endif %}
-		<p>*********** products ************</p>
-		<ul>
-			{% for product in products %}
-			<li>
-				{{product.title}} {% comment %} - {{product.collection.title}}{%
-				endcomment %}
-			</li>
-			{% comment %}
-			<li>{{product}}</li>
-			{% endcomment %} {% endfor %}
-		</ul>
-		<p>*********** customers ************</p>
-		<ul>
-			{% for customer in customers %}
-			<li>{{customer.first_name}}</li>
-			{% endfor %}
-		</ul>
-		<p>********** product *************</p>
-		<p>{{product.title}}</p>
-		<p>********** orders *************</p>
-		<ul>
-			{% for order in orders %}
-			<li>{{order.id}} | {{order.customer.first_name}}</li>
-			{% endfor %}
-		</ul>
-	  <p>********** orders count *************</p>
-		<ul>
-			{% for count in counts %}
-			<li>{{count.first_name}} | {{count.orders_count}}</li>
-			{% endfor %}
-		</ul>
-		<p>********** result *************</p>
-		<p>{{ result }}</p>
+		<div>
+		    {% if name%}
+			<h1>Hi {{name}}!</h1>
+			{% else %}
+			<h1>Hi there !</h1>
+			{% endif %}
+		</div>
+
+	    <div>
+		 	<p style="color: green; font-weight: 700;text-transform: uppercase;">********** product *************</p>
+			<p>{{product.title}}</p>
+		</div>
+
+		<div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** products *************</p>
+			<ul>
+				{% for product in products %}
+					<li>
+						{{product.title}} | {% comment %} | {{product.collection.title}}{%endcomment %}
+					</li>
+					{% comment %}
+						<li>{{product}}</li>
+					{% endcomment %} 
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** customers *************</p>
+			<ul>
+				{% for customer in customers %}
+				<li>{{customer.first_name}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div>
+		    <p style="color: green; font-weight: 700; text-transform: uppercase;">
+		        ********** orders *************
+		    </p>
+		    <table border="1" cellpadding="5" cellspacing="0">
+		        <thead>
+		            <tr>
+		                <th>Order Id</th>
+		                <th>Customer Name</th>
+		                <th>Payment Status</th>
+		                <th>Quantity</th>
+		                <th>Unit Price</th>
+		                <th>Total Price</th>
+						<th>Products Id</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            {% for order in orders %}
+		            <tr>
+		                <td>{{ order.id }}</td>
+		                <td>
+		                    <span style="color: red; display: inline-block; width: 50px; white-space: nowrap;">
+		                        {{ order.customer.first_name }}
+		                    </span>
+		                </td>
+		                <td>
+		                    {% if order.payment_status == 'C' %}
+		                        Complete
+		                    {% elif order.payment_status == 'P' %}
+		                        Pending
+		                    {% elif order.payment_status == 'F' %}
+		                        Failed
+		                    {% else %}
+		                        Unknown
+		                    {% endif %}
+		                </td>
+		                <!-- Assuming each order has multiple items, loop through them -->
+		                <td class="quantity">
+		                    {% for item in order.orderitem_set.all %}
+		                        {{ item.quantity }}<br>
+		                    {% endfor %}  
+		                </td>
+		                <td class="unit-price">
+		                    {% for item in order.orderitem_set.all %}
+		                        {{ item.unit_price }}<br>
+		                    {% endfor %}
+		                </td>
+		                <td class="total-price">
+						    {% for item in order.orderitem_set.all %}
+						        {{ item.total_price }}<br>
+						    {% endfor %}
+		                </td>
+						<td class="products-id">
+							{% for item in order.orderitem_set.all %}
+								{{item.product_id}}<br>
+							{% endfor %}
+						</td>
+		            </tr>
+		            {% endfor %}
+		        </tbody>
+		    </table>
+		</div>
+
+
+		<div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** orders count *************</p>
+			<ul>
+				{% for count in counts %}
+				<li>{{count.first_name}} | {{count.orders_count}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** result *************</p>
+			<p>{{ result }}</p>
+		</div>
+
+		<div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** results *************</p>
+			 <table border="1" cellpadding="5" cellspacing="0">
+		        <thead>
+		            <tr>
+		                <th>Customer Name</th>
+						<th>Membership</th>
+		                <th>Is New</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+					{% for result in results %}
+		            <tr>
+		                <td>{{ result.full_name }}</td>
+		                <td>{{ result.membership }}</td>
+						<td>
+							{{ result.is_new}}
+						</td>
+		            </tr>
+		            {% endfor %}
+		        </tbody>
+		    </table>
+		</div>
+
+		<div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** tags *************</p>
+			<ul>
+				{% for tag in tags %}
+				<li>{{tag}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+	   <!-- <div>
+			<p style="color: green; font-weight: 700;text-transform: uppercase;">********** result raw *************</p>
+			<ul>
+				{% for raw in raws %}
+				<li>{{count.first_name}} | {{count.orders_count}}</li>
+				{% endfor %}
+			</ul>
+		</div> -->
 	</body>
 </html>
