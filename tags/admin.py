@@ -5,5 +5,5 @@ from .models import Tag
 
 
 @admin.register(Tag)
-class AdminTag(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     search_fields = ['label']

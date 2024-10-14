@@ -16,6 +16,7 @@ Including another URLconf
 import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 admin.site.site_header = 'E-Commerce Administration'
 admin.site.index_title = 'Admin Panel'
@@ -23,5 +24,6 @@ admin.site.index_title = 'Admin Panel'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include('home.urls')),
+    path('', RedirectView.as_view(url='/admin/', permanent=False)),  # Redirect root URL to /home/
     path('__debug__/', include(debug_toolbar.urls)),
 ]
